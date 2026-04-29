@@ -30,7 +30,8 @@ FROM node:22-alpine
 
 WORKDIR /app
 
-COPY server/package*.json ./
+# Get package.json from the builder (not from the empty build context)
+COPY --from=server-builder /server/package*.json ./
 RUN npm ci --omit=dev
 
 # Compiled server
@@ -40,7 +41,7 @@ COPY --from=server-builder /server/dist ./dist
 COPY --from=client-builder /client/dist ./public
 
 # Prisma schema and migrations (needed for `prisma migrate deploy`)
-COPY server/prisma ./prisma
+COPY --from=server-builder /server/prisma ./prisma
 
 EXPOSE 3001
 
