@@ -1,6 +1,6 @@
 [submodule "client"]
 	path = client
-	url = git@github.com:amitrofanova/food-tracker-client.git
+  url = https://github.com/amitrofanova/food-tracker-client.git
 [submodule "server"]
-	path = server
-	url = git@github.com:amitrofanova/food-tracker-server.git
+  path = server
+  url = https://github.com/amitrofanova/food-tracker-server.git
