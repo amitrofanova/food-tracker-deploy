@@ -6,7 +6,7 @@ services:
       POSTGRES_PASSWORD: postgres
       POSTGRES_DB: food_tracker
     ports:
-      - "5432:5432"
+      - "5433:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
     healthcheck:
@@ -41,7 +41,7 @@ services:
       - ./client:/app
       - /app/node_modules
     ports:
-      - "5173:5173"
+      - "5174:5173"
     environment:
       # Accessed by the browser, so must be the host-mapped port
       VITE_API_BASE_URL: http://localhost:3001
