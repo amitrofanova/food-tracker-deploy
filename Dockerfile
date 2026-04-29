@@ -20,6 +20,10 @@ WORKDIR /server
 
 RUN git clone https://github.com/amitrofanova/food-tracker-server.git .
 
+# prisma generate (part of npm run build) needs DATABASE_URL to parse prisma.config.ts
+# A dummy value is fine here — no real DB connection is made during code generation
+ENV DATABASE_URL=postgresql://dummy:dummy@localhost:5432/dummy
+
 RUN npm install
 # Generates Prisma client into src/generated/prisma, then compiles TypeScript to dist/
 RUN npm run build
