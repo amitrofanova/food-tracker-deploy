@@ -10,9 +10,7 @@ services:
       cd client && yarn install && yarn build &&
       mkdir -p ../server/public && cp -r dist/. ../server/public/ &&
       cd ../server && npm install && npm run build
-    startCommand: node server/dist/server.js
-    # Runs after build, before traffic is switched to the new deploy
-    preDeployCommand: cd server && npx prisma migrate deploy
+    startCommand: cd server && npx prisma migrate deploy && node dist/server.js
     envVars:
       - key: NODE_ENV
         value: production
