@@ -39,9 +39,8 @@ COPY --from=server-builder /server/dist ./dist
 # Built Vue SPA — Fastify serves this as static files
 COPY --from=client-builder /client/dist ./public
 
-# Prisma schema and migrations
+# Prisma schema and migrations (needed for `prisma migrate deploy`)
 COPY server/prisma ./prisma
-COPY server/prisma.config.ts ./prisma.config.ts
 
 EXPOSE 3001
 
