@@ -1,28 +1,27 @@
 # ---- Stage 1: Build Vue client ----
 FROM node:22-alpine AS client-builder
 
+RUN apk add --no-cache git
+
 WORKDIR /client
 
-# VITE_API_BASE_URL is empty because client and API share the same origin.
-# Pass a build arg only if you need to override (e.g. for a CDN).
-ARG VITE_API_BASE_URL=""
-ENV VITE_API_BASE_URL=$VITE_API_BASE_URL
+RUN git clone https://github.com/amitrofanova/food-tracker-client.git .
 
-COPY client/package*.json ./
-RUN npm install
-
-COPY client/ .
-RUN npm run build
+# Use yarn because the client project uses yarn
+RUN yarn install
+RUN yarn build
 
 # ---- Stage 2: Build server ----
 FROM node:22-alpine AS server-builder
 
+RUN apk add --no-cache git
+
 WORKDIR /server
 
-COPY server/package*.json ./
-RUN npm install
+RUN git clone https://github.com/amitrofanova/food-tracker-server.git .
 
-COPY server/ .
+RUN npm install
+# Generates Prisma client into src/generated/prisma, then compiles TypeScript to dist/
 RUN npm run build
 
 # ---- Stage 3: Production runtime ----
@@ -30,7 +29,6 @@ FROM node:22-alpine
 
 WORKDIR /app
 
-# Get package.json from the builder (not from the empty build context)
 COPY --from=server-builder /server/package*.json ./
 RUN npm install --omit=dev
 
@@ -46,6 +44,5 @@ COPY --from=server-builder /server/prisma ./prisma
 EXPOSE 3001
 
 # Run pending migrations, then start the server.
-# On Render.com you can use the "Release Command" for migrations instead:
-#   npx prisma migrate deploy
+# On Render.com you can instead set the Release Command: npx prisma migrate deploy
 CMD ["sh", "-c", "npx prisma migrate deploy && node dist/server.js"]
