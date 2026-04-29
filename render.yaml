@@ -7,10 +7,12 @@ services:
     rootDir: .
     # Build client, copy dist to server/public, then build server
     buildCommand: >
-      cd client && yarn install && yarn build &&
-      mkdir -p ../server/public && cp -r dist/. ../server/public/ &&
-      cd ../server && npm install && npm run build
-    startCommand: cd server && npx prisma migrate deploy && node dist/server.js
+      git clone https://github.com/amitrofanova/food-tracker-client.git _client &&
+      git clone https://github.com/amitrofanova/food-tracker-server.git _server &&
+      cd _client && yarn install && yarn build &&
+      mkdir -p ../_server/public && cp -r dist/. ../_server/public/ &&
+      cd ../_server && npm install && npm run build
+    startCommand: cd _server && npx prisma migrate deploy && node dist/server.js
     envVars:
       - key: NODE_ENV
         value: production
