@@ -9,7 +9,7 @@ ARG VITE_API_BASE_URL=""
 ENV VITE_API_BASE_URL=$VITE_API_BASE_URL
 
 COPY client/package*.json ./
-RUN npm ci
+RUN npm install
 
 COPY client/ .
 RUN npm run build
@@ -20,7 +20,7 @@ FROM node:22-alpine AS server-builder
 WORKDIR /server
 
 COPY server/package*.json ./
-RUN npm ci
+RUN npm install
 
 COPY server/ .
 RUN npm run build
@@ -32,7 +32,7 @@ WORKDIR /app
 
 # Get package.json from the builder (not from the empty build context)
 COPY --from=server-builder /server/package*.json ./
-RUN npm ci --omit=dev
+RUN npm install --omit=dev
 
 # Compiled server
 COPY --from=server-builder /server/dist ./dist
