@@ -9,7 +9,7 @@ services:
     buildCommand: >
       git clone https://github.com/amitrofanova/food-tracker-client.git _client &&
       git clone https://github.com/amitrofanova/food-tracker-server.git _server &&
-      cd _client && yarn install && yarn build &&
+      cd _client && yarn install --production=false && yarn build &&
       mkdir -p ../_server/public && cp -r dist/. ../_server/public/ &&
       cd ../_server && npm install && npm run build
     startCommand: cd _server && npx prisma migrate deploy && node dist/server.js
