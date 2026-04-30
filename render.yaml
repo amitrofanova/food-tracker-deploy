@@ -2,7 +2,7 @@ services:
   - type: web
     name: food-tracker
     runtime: node
-    region: singapore
+    region: virginia
     plan: free
     rootDir: .
     # Build client, copy dist to server/public, then build server
