@@ -2,11 +2,11 @@ services:
   - type: web
     name: food-tracker
     runtime: node
-    region: virginia
     plan: free
     rootDir: .
     # Build client, copy dist to server/public, then build server
     buildCommand: >
+      rm -rf _client _server &&
       git clone https://github.com/amitrofanova/food-tracker-client.git _client &&
       git clone https://github.com/amitrofanova/food-tracker-server.git _server &&
       cd _client && yarn install --production=false && yarn build &&
@@ -19,4 +19,6 @@ services:
       - key: DATABASE_URL
         sync: false # set manually in the Render dashboard
       - key: JWT_SECRET
+        sync: false # set manually in the Render dashboard
+      - key: OPENROUTER_API_KEY
         sync: false # set manually in the Render dashboard
